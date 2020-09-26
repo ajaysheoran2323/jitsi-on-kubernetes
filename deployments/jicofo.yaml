@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    service: jicofo
+  name: jicofo
+  namespace: default
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 2147483647
+  selector:
+    matchLabels:
+      service: jicofo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: jicofo
+    spec:
+      containers:
+      - env:
+        - name: JICOFO_AUTH_PASSWORD
+          value: password
+        - name: JICOFO_AUTH_USER
+          value: focus
+        - name: JICOFO_COMPONENT_SECRET
+          value: password
+        - name: JVB_BREWERY_MUC
+          value: jvbbrewery
+        - name: TZ
+          value: Europe/Paris
+        - name: XMPP_AUTH_DOMAIN
+          value: auth.meet.jitsi
+        - name: XMPP_DOMAIN
+          value: meet.jitsi
+        - name: XMPP_INTERNAL_MUC_DOMAIN
+          value: internal-muc.meet.jitsi
+        - name: XMPP_SERVER
+          value: prosody.default.svc.cluster.local
+        image: jitsi/jicofo
+        imagePullPolicy: Always
+        name: jicofo
+        resources: {}
+        securityContext:
+          capabilities: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
