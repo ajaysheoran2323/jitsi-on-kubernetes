@@ -5,8 +5,11 @@
 #### Steps:
 1. `https://github.com/ajaysheoran2323/jitsi-on-kubernetes.git`
 2. Do the changes in files:
+
     https://github.com/ajaysheoran2323/jitsi-on-kubernetes/blob/master/deployments/jvb.yaml#L24
+    
     https://github.com/ajaysheoran2323/jitsi-on-kubernetes/blob/master/deployments/web-ingress.yaml#L8
+    
     https://github.com/ajaysheoran2323/jitsi-on-kubernetes/blob/master/deployments/web-ingress.yaml#L17-L18
     
 
