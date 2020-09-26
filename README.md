@@ -27,7 +27,6 @@
 
 #### Different topology
 
-To be able to do video conferencing with other people, the jvb component should be reachable by all participants (eg: a public IP).
 Thus the default behaviour of advertised the internal IP of jvb, is not really suitable in many cases.
 Kubernetes offers multiple possibilities to work around the problem. Not all options are available depending on the Kubernetes cluster setup.
 The chart tries to make all options available without enforcing one.
@@ -55,15 +54,14 @@ In this case you're not allowed to change the `jvb.replicaCount` to more than `1
 jvb:
   service:
     type: NodePort
-  # It may be required to change the default port to a value allowed by Kubernetes (30000-32768)
   UDPPort: 30000
   TCPPort: 30443
 
-  # Use public IP of one of your node, or the public IP of a loadbalancer in front of the nodes
-  publicIP: 1.2.3.4
+  publicIP: <LoadBalancer's public IP>
 ```
 
 In this case you're not allowed to change the `jvb.replicaCount` to more than `1`, UDP packets will be routed to random `jvb`, which would not allow for a working video setup.
+
 
 ##### Option 3: hostPort and node with Public IP
 
@@ -76,22 +74,4 @@ jvb:
   useNodeIP: true
 ```
 
-In this case you can have more the one `jvb` but you're putting you cluster at risk by having it directly exposed on the Internet.
-
-##### Option 4: Use ingress TCP/UDP forward capabilities
-
-In case of an ingress capable of doing tcp/udp forwarding (like nginx-ingress), it can be setup to forward the video streams.
-
-```yaml
-# Don't forget to configure the ingress properly (separate configuration)
-jvb:
-  # 1.2.3.4 being one of the IP of the ingress controller
-  publicIP: 1.2.3.4
-
-```
-
-Again in this case, only one jvb will work in this case.
-
-##### Option 5: Bring your own setup
-
-There are multiple other possibilities combining the available parameters, depending of your cluster/network setup.
+In this case you can have more the one `jvb`
