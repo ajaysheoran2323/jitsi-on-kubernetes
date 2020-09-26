@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: web
+  name: web
+  namespace: default
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 2147483647
+  selector:
+    matchLabels:
+      service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: web
+    spec:
+      containers:
+      - env:
+        - name: JICOFO_AUTH_USER
+          value: focus
+        - name: XMPP_DOMAIN
+          value: meet.jitsi
+        - name: XMPP_AUTH_DOMAIN
+          value: auth.meet.jitsi
+        - name: XMPP_BOSH_URL_BASE
+          value: http://prosody:5280
+        - name: XMPP_MUC_DOMAIN
+          value: muc.meet.jitsi
+        - name: TZ
+          value: Europe/Paris
+        image: jitsi/web
+        imagePullPolicy: Always
+        name: web
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        - containerPort: 443
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
